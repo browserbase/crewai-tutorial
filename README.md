@@ -1,5 +1,5 @@
 # Tutorial: build a Flight Booking Crew
-## Build a Crew that finds the best roundtrip flights on the given dates.
+### Build a Crew that finds the best roundtrip flights on the given dates.
 
 This is based off the guide in the [Browserbase docs](https://docs.browserbase.com/integrations/crew-ai/build-a-flight-booker)
 
