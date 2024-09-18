@@ -14,28 +14,16 @@ def browserbase(url: str):
     :return: The text content of the page
     """
     with sync_playwright() as playwright:
-        print(f"Loading {url} using Browserbase")
-        browser = None
-        page = None
-        try:
-            browser = playwright.chromium.connect_over_cdp(
-                "wss://connect.browserbase.com?enableProxy=false&apiKey="
-                + os.environ["BROWSERBASE_API_KEY"]
-            )
-            context = browser.contexts[0]
-            page = context.pages[0]
-        except Exception as e:
-            print("No context found, using local browser")
-            print(e)
-            browser = playwright.chromium.launch(headless=False)
-            page = browser.new_page()
-
-        print("Page found, going to URL", url)
+        browser = playwright.chromium.connect_over_cdp(
+            "wss://connect.browserbase.com?apiKey="
+            + os.environ["BROWSERBASE_API_KEY"]
+        )
+        context = browser.contexts[0]
+        page = context.pages[0]
         page.goto(url)
-        print("Page loaded")
 
         # Wait for the flight search to finish
-        sleep(20)
+        sleep(25)
 
         content = html2text(page.content())
         browser.close()

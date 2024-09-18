@@ -1,7 +1,6 @@
 from crewai_tools import tool
 from typing import Optional
 
-
 @tool("Kayak tool")
 def kayak(
     departure: str, destination: str, date: str, return_date: Optional[str] = None
@@ -21,3 +20,4 @@ def kayak(
         URL += f"/{return_date}"
     URL += "?currency=USD"
     return URL
+

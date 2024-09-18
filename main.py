@@ -7,11 +7,10 @@ from dotenv import load_dotenv
 
 load_dotenv()  # take environment variables from .env.
 
-
 flights_agent = Agent(
     role="Flights",
     goal="Search flights",
-    backstory="An agent that can search for flights.",
+    backstory="I am an agent that can search for flights.",
     tools=[kayak, browserbase],
     allow_delegation=False,
 )
@@ -19,13 +18,13 @@ flights_agent = Agent(
 summarize_agent = Agent(
     role="Summarize",
     goal="Summarize content",
-    backstory="An agent that can summarize text.",
+    backstory="I am an agent that can summarize text.",
     allow_delegation=False,
 )
 
 output_search_example = """
-Here are our top 5 flights from Sofia to Berlin on 24th May 2024:
-1. Bulgaria Air: Departure: 14:45, Arrival: 15:55, Duration: 2 hours 10 minutes, Layovers: Munich, 2 hours layover, Price: $123, Details: https://www.kayak.com/some-url-to-book
+Here are our top 5 flights from San Francisco to New York on 21st September 2024:
+1. Delta Airlines: Departure: 21:35, Arrival: 03:50, Duration: 6 hours 15 minutes, Price: $125, Details: https://www.kayak.com/flights/sfo/jfk/2024-09-21/12:45/13:55/2:10/delta/airlines/economy/1
 """
 
 search_task = Task(
@@ -34,25 +33,23 @@ search_task = Task(
     ),
     expected_output=output_search_example,
     agent=flights_agent,
-    output_file="flights_search.txt",
 )
 
 output_providers_example = """
-Here are our top 5 picks from Sofia to Berlin on 24th May 2024:
-1. Bulgaria Air:
-   - Departure: 14:45
-   - Arrival: 15:55
-   - Duration: 2 hours 10 minutes
-   - Layovers: Munich, 2 hours layover
-   - Price: $123
-   - Booking: [MyTrip](https://www.kayak.com/some-url-to-book)
+Here are our top 5 picks from San Francisco to New York on 21st September 2024:
+1. Delta Airlines:
+    - Departure: 21:35
+    - Arrival: 03:50
+    - Duration: 6 hours 15 minutes
+    - Price: $125
+    - Booking: [Delta Airlines](https://www.kayak.com/flights/sfo/jfk/2024-09-21/12:45/13:55/2:10/delta/airlines/economy/1)
+    ...
 """
 
 search_booking_providers_task = Task(
     description="Load every flight individually and find available booking providers",
     expected_output=output_providers_example,
     agent=flights_agent,
-    output_file="flights_providers.txt",
 )
 
 crew = Crew(
@@ -61,6 +58,11 @@ crew = Crew(
     # let's cap the number of OpenAI requests as the Agents
     #   may have to do multiple costly calls with large context
     max_rpm=100,
+    # let's also set verbose=True and planning=True
+    #   to see the progress of the Agents
+    #   and the Task execution. Remove these lines
+    #   if you want to run the script without
+    #   seeing the progress (like in production).
     verbose=True,
     planning=True,
 )
@@ -72,4 +74,5 @@ result = crew.kickoff(
     }
 )
 
-print("Got result", result)
+print(result)
+
