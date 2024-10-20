@@ -19,4 +19,4 @@ pylint = "^3.2.7"
 
 [build-system]
 requires = ["poetry-core"]
-build-backen = "poetry.core.masonry.api"
+build-backend = "poetry.core.masonry.api"
